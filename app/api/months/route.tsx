@@ -44,7 +44,7 @@ export async function GET(req: Request) {
 
   // Dot sizing
   const totalDotRows = dotRowsPerMonth * monthRows
-  const gapRatio = 0.7
+  const gapRatio = 0.5
   const dotPlusGap = availableForDots / totalDotRows
   const dotSize = Math.round(dotPlusGap / (1 + gapRatio))
   const gap = Math.round(dotSize * gapRatio)
@@ -121,7 +121,7 @@ export async function GET(req: Request) {
         {/* 4x3 grid of months */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: Math.round(monthRowGap) }}>
           {[0, 1, 2, 3].map((row) => (
-            <div key={row} style={{ display: 'flex', gap: Math.floor(width * 0.06) }}>
+            <div key={row} style={{ display: 'flex', gap: Math.floor(width * 0.045) }}>
               {[0, 1, 2].map((col) => {
                 const m = months[row * 3 + col]
                 return (
