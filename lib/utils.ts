@@ -24,6 +24,8 @@ export const themes = {
   blueprint: { bg: '#e8e0d0', done: '#2a4a8a', now: '#1a3a7a', future: '#d8d0c0', special: '#8a2a4a' },
   /** Sage green with terracotta accents */
   sage: { bg: '#a8b8a8', done: '#8b4a3a', now: '#6a3a2a', future: '#98a898', special: '#3a6a8b' },
+  /** Pink/rose theme */
+  rose: { bg: '#1a1216', done: '#e890a8', now: '#ff4080', future: '#4a2035', special: '#00d9ff' },
 } as const
 
 export type ThemeName = keyof typeof themes

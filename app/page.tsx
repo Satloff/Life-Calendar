@@ -58,6 +58,7 @@ const SITE_THEMES: Record<ThemeName, {
   duck: { bg: '#d4a039', text: '#0a2a4e', accent: '#082848', muted: '#9a7020', inputBg: '#c89530', border: '#8a6018', special: '#0a2a4e' },
   blueprint: { bg: '#e8e0d0', text: '#1a3070', accent: '#0a2060', muted: '#b8b0a0', inputBg: '#e0d8c8', border: '#a8a090', special: '#701a3a' },
   sage: { bg: '#a8b8a8', text: '#5a2a1a', accent: '#4a2010', muted: '#788878', inputBg: '#9cac9c', border: '#687868', special: '#1a4a6a' },
+  rose: { bg: '#1a1216', text: '#e890a8', accent: '#ff4080', muted: '#4a2035', inputBg: '#251820', border: '#3d1828', special: '#00d9ff' },
 }
 
 // ============================================
@@ -71,6 +72,8 @@ export default function HomePage() {
   const [birthdate, setBirthdate] = useState('')
   const [showToast, setShowToast] = useState(false)
   const [timestamp, setTimestamp] = useState('')
+  const [heartJiggle, setHeartJiggle] = useState(false)
+  const [heartClicks, setHeartClicks] = useState(0)
 
   // Set timestamp on client only to avoid hydration mismatch
   useEffect(() => {
@@ -88,7 +91,7 @@ export default function HomePage() {
     setTimeout(() => setShowToast(false), 2000)
   }
 
-  const isDarkTheme = theme === 'amber' || theme === 'midnight' || theme === 'random'
+  const isDarkTheme = theme === 'amber' || theme === 'midnight' || theme === 'rose' || theme === 'random'
 
   return (
     <main className="main">
@@ -177,6 +180,79 @@ export default function HomePage() {
           from { opacity: 0; transform: translateX(-50%) translateY(10px); }
           to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
+        
+        .footer {
+          text-align: center;
+          padding: 40px 20px;
+          margin-top: 60px;
+          font-size: 14px;
+          color: ${t.muted};
+          border-top: 1px solid ${t.border};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 4px;
+        }
+        .footer .heart-icon {
+          width: 16px;
+          height: 16px;
+          color: ${t.accent};
+          cursor: pointer;
+          transition: transform 0.2s ease;
+        }
+        .footer .heart-icon:hover {
+          transform: scale(1.2);
+        }
+        .footer .heart-icon.jiggle {
+          animation: jiggle 0.5s ease;
+        }
+        @keyframes jiggle {
+          0% { transform: scale(1) rotate(0deg); }
+          25% { transform: scale(1.15) rotate(-8deg); }
+          50% { transform: scale(1.15) rotate(8deg); }
+          75% { transform: scale(1.1) rotate(-4deg); }
+          100% { transform: scale(1) rotate(0deg); }
+        }
+        .footer .heart-wrapper {
+          position: relative;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .footer .heart-tooltip {
+          position: absolute;
+          top: -28px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: ${t.text};
+          color: ${t.bg};
+          font-size: 11px;
+          padding: 4px 8px;
+          border-radius: 4px;
+          white-space: nowrap;
+          animation: tooltipPop 0.2s ease-out;
+        }
+        .footer .heart-tooltip::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%);
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-top: 5px solid ${t.text};
+        }
+        @keyframes tooltipPop {
+          from { opacity: 0; transform: translateX(-50%) translateY(5px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        .footer .footer-link {
+          color: ${t.text};
+          text-decoration: none;
+          opacity: 0.8;
+          transition: opacity 0.2s;
+        }
+        .footer .footer-link:hover { opacity: 1; }
         
         input[type="date"]::-webkit-calendar-picker-indicator {
           filter: ${isDarkTheme ? 'invert(1)' : 'none'}; opacity: 0.6; cursor: pointer;
@@ -310,6 +386,30 @@ export default function HomePage() {
       </div>
 
       {showToast && <div className="toast">URL copied to clipboard</div>}
+
+      {/* Footer */}
+      <footer className="footer">
+        Made with{' '}
+        <span className="heart-wrapper">
+          {heartClicks > 0 && <span className="heart-tooltip">{heartClicks}</span>}
+          <svg 
+            className={`heart-icon ${heartJiggle ? 'jiggle' : ''}`}
+            viewBox="0 0 24 24" 
+            fill="currentColor"
+            onClick={() => {
+              setHeartJiggle(true)
+              setHeartClicks(c => c + 1)
+              setTimeout(() => setHeartJiggle(false), 500)
+            }}
+          >
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
+        </span>
+        {' '}by{' '}
+        <a href="https://www.linkedin.com/in/theo-satloff/" target="_blank" rel="noopener noreferrer" className="footer-link">
+          theo-satloff
+        </a>
+      </footer>
     </main>
   )
 }
