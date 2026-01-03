@@ -8,21 +8,29 @@ import { DEFAULTS } from '@/lib/constants'
 // CONFIGURATION
 // ============================================
 
-const IPHONE_MODELS = [
+interface IPhoneModel {
+  name: string
+  width: number
+  height: number
+}
+
+const IPHONE_MODELS: IPhoneModel[] = [
   { name: 'iPhone 16 Pro Max', width: 1320, height: 2868 },
   { name: 'iPhone 16 Pro / 15 Pro Max', width: 1179, height: 2556 },
   { name: 'iPhone 16 / 15 / 15 Pro / 14 Pro', width: DEFAULTS.WIDTH, height: DEFAULTS.HEIGHT },
   { name: 'iPhone 14 Pro Max', width: 1290, height: 2796 },
   { name: 'iPhone 14 / 13 / 12', width: 1170, height: 2532 },
   { name: 'iPhone SE (3rd gen)', width: 750, height: 1334 },
-] as const
+]
 
-const LAYOUTS = [
+type LayoutPath = 'days' | 'months' | 'quarters' | 'life'
+
+const LAYOUTS: readonly { name: string; path: LayoutPath }[] = [
   { name: 'Days (all days of the year)', path: 'days' },
   { name: 'Months (12 month grids)', path: 'months' },
   { name: 'Quarters (4 quarter grids)', path: 'quarters' },
   { name: 'Life (weeks until 90)', path: 'life' },
-] as const
+]
 
 const THEME_NAMES = Object.keys(themes) as ThemeName[]
 
@@ -49,7 +57,7 @@ const SITE_THEMES: Record<ThemeName, {
 
 export default function HomePage() {
   const [theme, setTheme] = useState<ThemeName>(DEFAULTS.THEME as ThemeName)
-  const [layout, setLayout] = useState(LAYOUTS[0].path)
+  const [layout, setLayout] = useState<LayoutPath>('days')
   const [model, setModel] = useState(IPHONE_MODELS[2])
   const [birthdate, setBirthdate] = useState('')
   const [showToast, setShowToast] = useState(false)
@@ -189,7 +197,7 @@ export default function HomePage() {
               <div className="step-content">
                 <div className="form-group">
                   <label className="form-label">Layout Style</label>
-                  <select value={layout} onChange={(e) => setLayout(e.target.value)} className="form-select">
+                  <select value={layout} onChange={(e) => setLayout(e.target.value as LayoutPath)} className="form-select">
                     {LAYOUTS.map(l => <option key={l.path} value={l.path}>{l.name}</option>)}
                   </select>
                 </div>
