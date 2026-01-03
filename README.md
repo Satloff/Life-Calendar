@@ -4,6 +4,15 @@ Dynamic wallpaper generator for tracking your year and life progress. Designed f
 
 ![Life Calendar Preview](https://via.placeholder.com/800x400?text=Life+Calendar+Preview)
 
+## Inspiration
+
+This project is inspired by Tim Urban's 2014 essay **["Your Life in Weeks"](https://waitbutwhy.com/2014/05/life-weeks.html)** on Wait But Why.
+
+> *"Sometimes life seems really short, and other times it seems impossibly long. But this chart helps to emphasize that it's most certainly finite. Those are your weeks and they're all you've got."*
+> — Tim Urban
+
+The essay visualizes a 90-year human life as a grid of weeks — just 4,680 boxes. This project brings that concept to your phone as a daily wallpaper, reminding you to make the most of your precious weeks.
+
 ## Features
 
 - **4 Layout Styles**
@@ -134,5 +143,6 @@ MIT License — feel free to use and modify.
 
 ## Credits
 
+- Concept: [Tim Urban](https://waitbutwhy.com) — ["Your Life in Weeks"](https://waitbutwhy.com/2014/05/life-weeks.html) (2014)
 - Font: [Departure Mono](https://departuremono.com) by Helena Zhang
 
