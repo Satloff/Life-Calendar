@@ -44,9 +44,9 @@ export async function GET(req: Request) {
 
   // Dot sizing
   const totalDotRows = dotRowsPerMonth * monthRows
-  const gapRatio = 0.5
+  const gapRatio = 0.8
   const dotPlusGap = availableForDots / totalDotRows
-  const dotSize = Math.round(dotPlusGap / (1 + gapRatio))
+  const dotSize = Math.round(dotPlusGap / (1 + gapRatio) * 0.85)
   const gap = Math.round(dotSize * gapRatio)
 
   // Build month grids
