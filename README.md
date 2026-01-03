@@ -144,5 +144,6 @@ MIT License — feel free to use and modify.
 ## Credits
 
 - Concept: [Tim Urban](https://waitbutwhy.com) — ["Your Life in Weeks"](https://waitbutwhy.com/2014/05/life-weeks.html) (2014)
+- iPhone Wallpaper Idea: [Luis Batalha](https://www.linkedin.com/in/luis-batalha-90811838a/)
 - Font: [Departure Mono](https://departuremono.com) by Helena Zhang
 
