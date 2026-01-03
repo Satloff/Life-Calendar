@@ -10,11 +10,14 @@ export async function GET(req: Request) {
   const { width, height, theme, date, birthdate } = getParams(req.url)
   const t = themes[theme] || themes.amber
 
+  // Use default birthdate if not provided
+  const effectiveBirthdate = birthdate || new Date(DEFAULTS.BIRTHDATE)
+
   // Life calculations
   const lifespan = DEFAULTS.LIFESPAN
   const weeksPerYear = 52
   const totalWeeks = lifespan * weeksPerYear
-  const weeksLived = weeksAlive(birthdate, date)
+  const weeksLived = weeksAlive(effectiveBirthdate, date)
   const pct = ((weeksLived / totalWeeks) * 100).toFixed(1)
 
   // Grid configuration
@@ -31,12 +34,12 @@ export async function GET(req: Request) {
   const dotPlusGap = availableForDots / totalGridRows
   const dotSize = Math.round(dotPlusGap / (1 + gapRatio))
   const gap = Math.round(dotSize * gapRatio)
-
   // Build dot grid
   const dots = Array.from({ length: totalWeeks }, (_, i) => {
-    let color = t.future
+    let color: string = t.future
     if (i < weeksLived) color = t.done
     if (i === weeksLived) color = t.now
+    
     return (
       <div
         key={i}
@@ -97,7 +100,8 @@ export async function GET(req: Request) {
             gap: 16,
           }}
         >
-          <span style={{ color: t.done, opacity: 0.6 }}>{pct}% to {lifespan}</span>
+          <span style={{ color: t.now }}>{pct}%</span>
+          <span style={{ color: t.done, opacity: 0.6 }}>to {lifespan}</span>
         </div>
       </div>
     ),

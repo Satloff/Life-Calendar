@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og'
-import { themes, getParams, daysInYear, daysInMonth } from '@/lib/utils'
+import { themes, getParams, daysInYear, daysInMonth, isBirthday } from '@/lib/utils'
 import { loadFont, getFontConfig } from '@/lib/font'
 import { LAYOUT, FONT } from '@/lib/constants'
 
@@ -9,7 +9,7 @@ const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SE
 
 export async function GET(req: Request) {
   const fontData = await loadFont(req.url)
-  const { width, height, theme, date } = getParams(req.url)
+  const { width, height, theme, date, birthdate } = getParams(req.url)
   const t = themes[theme] || themes.amber
 
   const year = date.getFullYear()
@@ -66,6 +66,8 @@ export async function GET(req: Request) {
 
     // Day dots
     for (let d = 1; d <= days; d++) {
+      const isBirthdayDay = isBirthday(m, d, birthdate)
+      
       let color: string = t.future
       if (m < currentMonth || (m === currentMonth && d < currentDay)) {
         color = t.done
@@ -73,6 +75,10 @@ export async function GET(req: Request) {
       if (m === currentMonth && d === currentDay) {
         color = t.now
       }
+      if (isBirthdayDay) {
+        color = t.special
+      }
+      
       dots.push(
         <div key={d} style={{ width: dotSize, height: dotSize, backgroundColor: color }} />
       )

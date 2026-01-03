@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og'
-import { themes, getParams, dayOfYear, daysInYear } from '@/lib/utils'
+import { themes, getParams, dayOfYear, daysInYear, birthdayDayOfYear } from '@/lib/utils'
 import { loadFont, getFontConfig } from '@/lib/font'
 import { LAYOUT, FONT } from '@/lib/constants'
 
@@ -7,7 +7,7 @@ export const runtime = 'edge'
 
 export async function GET(req: Request) {
   const fontData = await loadFont(req.url)
-  const { width, height, theme, date } = getParams(req.url)
+  const { width, height, theme, date, birthdate } = getParams(req.url)
   const t = themes[theme] || themes.amber
 
   const year = date.getFullYear()
@@ -15,6 +15,7 @@ export async function GET(req: Request) {
   const totalDays = daysInYear(year)
   const daysLeft = totalDays - today
   const pct = Math.round((today / totalDays) * 100)
+  const birthdayDay = birthdayDayOfYear(birthdate, year)
 
   // Grid configuration
   const cols = 15
@@ -36,9 +37,13 @@ export async function GET(req: Request) {
   // Build dot grid
   const dots = Array.from({ length: totalDays }, (_, i) => {
     const dayNum = i + 1
-    let color = t.future
+    const isBirthdayDay = birthdayDay === dayNum
+    
+    let color: string = t.future
     if (dayNum < today) color = t.done
     if (dayNum === today) color = t.now
+    if (isBirthdayDay) color = t.special
+    
     return (
       <div
         key={dayNum}

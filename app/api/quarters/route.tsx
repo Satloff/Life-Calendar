@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og'
-import { themes, getParams, dayOfYear, daysInQuarter, quarterStartDay, daysInYear } from '@/lib/utils'
+import { themes, getParams, dayOfYear, daysInQuarter, quarterStartDay, daysInYear, birthdayDayOfYear } from '@/lib/utils'
 import { loadFont, getFontConfig } from '@/lib/font'
 import { LAYOUT, FONT } from '@/lib/constants'
 
@@ -9,7 +9,7 @@ const QUARTER_START_MONTHS = [0, 3, 6, 9]
 
 export async function GET(req: Request) {
   const fontData = await loadFont(req.url)
-  const { width, height, theme, date } = getParams(req.url)
+  const { width, height, theme, date, birthdate } = getParams(req.url)
   const t = themes[theme] || themes.amber
 
   const year = date.getFullYear()
@@ -17,6 +17,7 @@ export async function GET(req: Request) {
   const totalDays = daysInYear(year)
   const daysLeft = totalDays - today
   const pct = Math.round((today / totalDays) * 100)
+  const birthdayDay = birthdayDayOfYear(birthdate, year)
 
   // Grid configuration
   const cols = 7
@@ -54,9 +55,13 @@ export async function GET(req: Request) {
     // Day dots
     for (let i = 0; i < days; i++) {
       const dayNum = startDay + i
+      const isBirthdayDay = birthdayDay === dayNum
+      
       let color: string = t.future
       if (dayNum < today) color = t.done
       if (dayNum === today) color = t.now
+      if (isBirthdayDay) color = t.special
+      
       dots.push(
         <div key={i} style={{ width: dotSize, height: dotSize, backgroundColor: color }} />
       )

@@ -9,15 +9,15 @@ import { DEFAULTS } from './constants'
  */
 export const themes = {
   /** Dark amber/orange theme */
-  amber: { bg: '#1a1612', done: '#e89028', now: '#ff5500', future: '#5a4020' },
+  amber: { bg: '#1a1612', done: '#e89028', now: '#ff5500', future: '#5a4020', special: '#e84393' },
   /** Dark theme with white text */
-  midnight: { bg: '#1a1a1a', done: '#ffffff', now: '#ff6b47', future: '#3d3d3d' },
+  midnight: { bg: '#1a1a1a', done: '#ffffff', now: '#ff6b47', future: '#3d3d3d', special: '#00d9ff' },
   /** Light cream with blue accents */
-  retro: { bg: '#f0ede6', done: '#3d5a9f', now: '#e63946', future: '#b8c4e0' },
+  retro: { bg: '#f0ede6', done: '#3d5a9f', now: '#e63946', future: '#b8c4e0', special: '#9b59b6' },
   /** Light warm cream with dark text */
-  terminal: { bg: '#d4cfc4', done: '#2a2a2a', now: '#c41e3a', future: '#a8a090' },
+  terminal: { bg: '#d4cfc4', done: '#2a2a2a', now: '#c41e3a', future: '#a8a090', special: '#8e44ad' },
   /** Light paper-like with dark text */
-  paper: { bg: '#f5f2eb', done: '#2d2d2d', now: '#e63946', future: '#d4d0c8' },
+  paper: { bg: '#f5f2eb', done: '#2d2d2d', now: '#e63946', future: '#d4d0c8', special: '#9b59b6' },
 } as const
 
 export type ThemeName = keyof typeof themes
@@ -29,11 +29,15 @@ export type Theme = (typeof themes)[ThemeName]
 
 /**
  * Get the day of year (1-366) for a given date
+ * Uses UTC to avoid daylight saving time issues
  */
 export function dayOfYear(d: Date): number {
-  const start = new Date(d.getFullYear(), 0, 0)
-  const diff = d.getTime() - start.getTime()
-  return Math.floor(diff / (1000 * 60 * 60 * 24))
+  const year = d.getFullYear()
+  const month = d.getMonth()
+  const day = d.getDate()
+  const startOfYear = Date.UTC(year, 0, 1)
+  const currentDate = Date.UTC(year, month, day)
+  return Math.floor((currentDate - startOfYear) / (1000 * 60 * 60 * 24)) + 1
 }
 
 /**
@@ -93,7 +97,15 @@ export interface WallpaperParams {
   height: number
   theme: ThemeName
   date: Date
-  birthdate: Date
+  birthdate: Date | null
+}
+
+/**
+ * Parse a date string (YYYY-MM-DD) into a Date object in local time
+ */
+function parseLocalDate(dateStr: string): Date {
+  const [year, month, day] = dateStr.split('-').map(Number)
+  return new Date(year, month - 1, day)
 }
 
 /**
@@ -101,13 +113,31 @@ export interface WallpaperParams {
  */
 export function getParams(url: string): WallpaperParams {
   const u = new URL(url)
+  const birthdateParam = u.searchParams.get('birthdate')
+  const dateParam = u.searchParams.get('date')
   return {
     width: parseInt(u.searchParams.get('width') || String(DEFAULTS.WIDTH)),
     height: parseInt(u.searchParams.get('height') || String(DEFAULTS.HEIGHT)),
     theme: (u.searchParams.get('theme') || DEFAULTS.THEME) as ThemeName,
-    date: u.searchParams.get('date') ? new Date(u.searchParams.get('date')!) : new Date(),
-    birthdate: u.searchParams.get('birthdate') 
-      ? new Date(u.searchParams.get('birthdate')!) 
-      : new Date(DEFAULTS.BIRTHDATE),
+    date: dateParam ? parseLocalDate(dateParam) : new Date(),
+    birthdate: birthdateParam ? parseLocalDate(birthdateParam) : null,
   }
 }
+
+/**
+ * Check if a given month/day matches the birthday (ignoring year)
+ */
+export function isBirthday(month: number, day: number, birthdate: Date | null): boolean {
+  if (!birthdate) return false
+  return birthdate.getMonth() === month && birthdate.getDate() === day
+}
+
+/**
+ * Get the day of year for a birthday in a given year
+ */
+export function birthdayDayOfYear(birthdate: Date | null, year: number): number | null {
+  if (!birthdate) return null
+  const birthdayThisYear = new Date(year, birthdate.getMonth(), birthdate.getDate())
+  return dayOfYear(birthdayThisYear)
+}
+

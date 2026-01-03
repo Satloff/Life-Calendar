@@ -34,12 +34,13 @@ const SITE_THEMES: Record<ThemeName, {
   muted: string
   inputBg: string
   border: string
+  special: string
 }> = {
-  amber: { bg: '#1a1612', text: '#e89028', accent: '#ff5500', muted: '#5a4020', inputBg: '#251c14', border: '#3d2a18' },
-  midnight: { bg: '#1a1a1a', text: '#ffffff', accent: '#ff6b47', muted: '#3d3d3d', inputBg: '#222222', border: '#444444' },
-  retro: { bg: '#f0ede6', text: '#3d5a9f', accent: '#e63946', muted: '#b8c4e0', inputBg: '#e8e4dc', border: '#c8c4bc' },
-  terminal: { bg: '#d4cfc4', text: '#2a2a2a', accent: '#c41e3a', muted: '#a8a090', inputBg: '#c8c3b8', border: '#9a9588' },
-  paper: { bg: '#f5f2eb', text: '#2d2d2d', accent: '#e63946', muted: '#d4d0c8', inputBg: '#ebe8e0', border: '#c8c4bc' },
+  amber: { bg: '#1a1612', text: '#e89028', accent: '#ff5500', muted: '#5a4020', inputBg: '#251c14', border: '#3d2a18', special: '#e84393' },
+  midnight: { bg: '#1a1a1a', text: '#ffffff', accent: '#ff6b47', muted: '#3d3d3d', inputBg: '#222222', border: '#444444', special: '#00d9ff' },
+  retro: { bg: '#f0ede6', text: '#3d5a9f', accent: '#e63946', muted: '#b8c4e0', inputBg: '#e8e4dc', border: '#c8c4bc', special: '#9b59b6' },
+  terminal: { bg: '#d4cfc4', text: '#2a2a2a', accent: '#c41e3a', muted: '#a8a090', inputBg: '#c8c3b8', border: '#9a9588', special: '#8e44ad' },
+  paper: { bg: '#f5f2eb', text: '#2d2d2d', accent: '#e63946', muted: '#d4d0c8', inputBg: '#ebe8e0', border: '#c8c4bc', special: '#9b59b6' },
 }
 
 // ============================================
@@ -50,7 +51,7 @@ export default function HomePage() {
   const [theme, setTheme] = useState<ThemeName>(DEFAULTS.THEME as ThemeName)
   const [layout, setLayout] = useState(LAYOUTS[0].path)
   const [model, setModel] = useState(IPHONE_MODELS[2])
-  const [birthdate, setBirthdate] = useState(DEFAULTS.BIRTHDATE)
+  const [birthdate, setBirthdate] = useState('')
   const [showToast, setShowToast] = useState(false)
   const [timestamp, setTimestamp] = useState('')
 
@@ -61,7 +62,7 @@ export default function HomePage() {
 
   const t = SITE_THEMES[theme]
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-  const apiUrl = `${baseUrl}/api/${layout}?width=${model.width}&height=${model.height}&theme=${theme}${layout === 'life' ? `&birthdate=${birthdate}` : ''}`
+  const apiUrl = `${baseUrl}/api/${layout}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}`
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(apiUrl)
@@ -208,12 +209,10 @@ export default function HomePage() {
                     {THEME_NAMES.map(tn => <option key={tn} value={tn}>{tn}</option>)}
                   </select>
                 </div>
-                {layout === 'life' && (
-                  <div className="form-group">
-                    <label className="form-label">Birthdate</label>
-                    <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} className="form-input" />
-                  </div>
-                )}
+                <div className="form-group">
+                  <label className="form-label">Birthdate (optional - highlights your birthday)</label>
+                  <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} className="form-input" />
+                </div>
               </div>
             </div>
 
@@ -280,7 +279,7 @@ export default function HomePage() {
                 <div key={path} className="preview-item">
                   <p className="preview-label">{name.split(' ')[0]}</p>
                   <img 
-                    src={`/api/${path}?width=${model.width}&height=${model.height}&theme=${theme}${path === 'life' ? `&birthdate=${birthdate}` : ''}${timestamp}`}
+                    src={`/api/${path}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}${timestamp}`}
                     alt={name}
                     className={`preview-img ${path === layout ? 'selected' : 'unselected'}`}
                     onClick={() => setLayout(path)}
