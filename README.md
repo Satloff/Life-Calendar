@@ -3,10 +3,10 @@
 Dynamic wallpaper generator for tracking your year and life progress. Designed for iPhone lock screens with iOS Shortcuts automation.
 
 <p align="center">
-  <img src="https://life-cal-theo.vercel.app/api/days?width=400&height=867&theme=amber" alt="Days - Amber" width="180" />
-  <img src="https://life-cal-theo.vercel.app/api/months?width=400&height=867&theme=midnight" alt="Months - Midnight" width="180" />
-  <img src="https://life-cal-theo.vercel.app/api/quarters?width=400&height=867&theme=retro" alt="Quarters - Retro" width="180" />
-  <img src="https://life-cal-theo.vercel.app/api/life?width=400&height=867&theme=terminal&birthdate=1990-01-01" alt="Life - Terminal" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/days?width=1206&height=2622&theme=amber" alt="Days - Amber" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/months?width=1206&height=2622&theme=midnight" alt="Months - Midnight" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/quarters?width=1206&height=2622&theme=retro" alt="Quarters - Retro" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/life?width=1206&height=2622&theme=terminal&birthdate=1990-10-10" alt="Life - Terminal" width="180" />
 </p>
 
 ## Inspiration
