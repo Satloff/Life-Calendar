@@ -38,3 +38,9 @@ export const FONT = {
   PATH: '/fonts/DepartureMono-Regular.otf',
 } as const
 
+/**
+ * Tiny base64-encoded 4x4 noise texture PNG (very subtle grain)
+ * This creates a paper-like texture when tiled
+ */
+export const NOISE_TEXTURE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAJklEQVQIW2NkYGD4z8DAwMjAwMDIwMDAyMDAwPD/PwMDAyMDAwMA+wYEAQQ8QOAAAAAASUVORK5CYII='
+
