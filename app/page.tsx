@@ -53,6 +53,9 @@ const SITE_THEMES: Record<ThemeName, {
   retro: { bg: '#f0ede6', text: '#3d5a9f', accent: '#e63946', muted: '#b8c4e0', inputBg: '#e8e4dc', border: '#c8c4bc', special: '#9b59b6' },
   terminal: { bg: '#d4cfc4', text: '#2a2a2a', accent: '#c41e3a', muted: '#a8a090', inputBg: '#c8c3b8', border: '#9a9588', special: '#8e44ad' },
   paper: { bg: '#f5f2eb', text: '#2d2d2d', accent: '#e63946', muted: '#d4d0c8', inputBg: '#ebe8e0', border: '#c8c4bc', special: '#9b59b6' },
+  duck: { bg: '#d4a039', text: '#1a4a6e', accent: '#0d3a5c', muted: '#c49030', inputBg: '#c89530', border: '#b08028', special: '#1a4a6e' },
+  blueprint: { bg: '#e8e0d0', text: '#2a4a8a', accent: '#1a3a7a', muted: '#d8d0c0', inputBg: '#e0d8c8', border: '#c8c0b0', special: '#8a2a4a' },
+  sage: { bg: '#a8b8a8', text: '#8b4a3a', accent: '#6a3a2a', muted: '#98a898', inputBg: '#9cac9c', border: '#889888', special: '#3a6a8b' },
 }
 
 // ============================================

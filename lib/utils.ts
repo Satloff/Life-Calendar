@@ -18,6 +18,12 @@ export const themes = {
   terminal: { bg: '#d4cfc4', done: '#2a2a2a', now: '#c41e3a', future: '#a8a090', special: '#8e44ad' },
   /** Light paper-like with dark text */
   paper: { bg: '#f5f2eb', done: '#2d2d2d', now: '#e63946', future: '#d4d0c8', special: '#9b59b6' },
+  /** Mustard orange with blue accents - vintage duck style */
+  duck: { bg: '#d4a039', done: '#1a4a6e', now: '#0d3a5c', future: '#c49030', special: '#1a4a6e' },
+  /** Cream/beige with blueprint blue */
+  blueprint: { bg: '#e8e0d0', done: '#2a4a8a', now: '#1a3a7a', future: '#d8d0c0', special: '#8a2a4a' },
+  /** Sage green with terracotta accents */
+  sage: { bg: '#a8b8a8', done: '#8b4a3a', now: '#6a3a2a', future: '#98a898', special: '#3a6a8b' },
 } as const
 
 export type ThemeName = keyof typeof themes
