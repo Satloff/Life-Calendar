@@ -2,7 +2,12 @@
 
 Dynamic wallpaper generator for tracking your year and life progress. Designed for iPhone lock screens with iOS Shortcuts automation.
 
-![Life Calendar Preview](https://via.placeholder.com/800x400?text=Life+Calendar+Preview)
+<p align="center">
+  <img src="https://life-cal-theo.vercel.app/api/days?width=400&height=867&theme=amber" alt="Days - Amber" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/months?width=400&height=867&theme=midnight" alt="Months - Midnight" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/quarters?width=400&height=867&theme=retro" alt="Quarters - Retro" width="180" />
+  <img src="https://life-cal-theo.vercel.app/api/life?width=400&height=867&theme=terminal&birthdate=1990-01-01" alt="Life - Terminal" width="180" />
+</p>
 
 ## Inspiration
 
@@ -128,7 +133,7 @@ life-calendar/
 
 Deploy to Vercel with one click:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/life-calendar)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Satloff/life-calendar)
 
 Or deploy manually:
 
