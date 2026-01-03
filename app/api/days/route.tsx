@@ -52,9 +52,6 @@ export async function GET(req: Request) {
     )
   })
 
-  // Generate noise overlay for textured themes
-  const hasNoise = ['duck', 'blueprint', 'sage'].includes(theme)
-  
   return new ImageResponse(
     (
       <div
@@ -71,24 +68,8 @@ export async function GET(req: Request) {
           paddingBottom: Math.floor(height * LAYOUT.BOTTOM_PADDING),
           paddingLeft: LAYOUT.SIDE_PADDING,
           paddingRight: LAYOUT.SIDE_PADDING,
-          position: 'relative',
         }}
       >
-        {/* Noise overlay for textured themes */}
-        {hasNoise && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-              opacity: 0.04,
-              display: 'flex',
-            }}
-          />
-        )}
         {/* Title */}
         <div
           style={{

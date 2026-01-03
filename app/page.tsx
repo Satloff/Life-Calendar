@@ -37,6 +37,8 @@ const LAYOUTS: readonly { name: string; path: LayoutPath }[] = [
 ]
 
 const THEME_NAMES = Object.keys(themes) as ThemeName[]
+const THEME_OPTIONS = [...THEME_NAMES, 'random'] as const
+type ThemeOption = ThemeName | 'random'
 
 /** Extended site themes with UI-specific colors */
 const SITE_THEMES: Record<ThemeName, {
@@ -53,9 +55,9 @@ const SITE_THEMES: Record<ThemeName, {
   retro: { bg: '#f0ede6', text: '#3d5a9f', accent: '#e63946', muted: '#b8c4e0', inputBg: '#e8e4dc', border: '#c8c4bc', special: '#9b59b6' },
   terminal: { bg: '#d4cfc4', text: '#2a2a2a', accent: '#c41e3a', muted: '#a8a090', inputBg: '#c8c3b8', border: '#9a9588', special: '#8e44ad' },
   paper: { bg: '#f5f2eb', text: '#2d2d2d', accent: '#e63946', muted: '#d4d0c8', inputBg: '#ebe8e0', border: '#c8c4bc', special: '#9b59b6' },
-  duck: { bg: '#d4a039', text: '#1a4a6e', accent: '#0d3a5c', muted: '#c49030', inputBg: '#c89530', border: '#b08028', special: '#1a4a6e' },
-  blueprint: { bg: '#e8e0d0', text: '#2a4a8a', accent: '#1a3a7a', muted: '#d8d0c0', inputBg: '#e0d8c8', border: '#c8c0b0', special: '#8a2a4a' },
-  sage: { bg: '#a8b8a8', text: '#8b4a3a', accent: '#6a3a2a', muted: '#98a898', inputBg: '#9cac9c', border: '#889888', special: '#3a6a8b' },
+  duck: { bg: '#d4a039', text: '#0a2a4e', accent: '#082848', muted: '#9a7020', inputBg: '#c89530', border: '#8a6018', special: '#0a2a4e' },
+  blueprint: { bg: '#e8e0d0', text: '#1a3070', accent: '#0a2060', muted: '#b8b0a0', inputBg: '#e0d8c8', border: '#a8a090', special: '#701a3a' },
+  sage: { bg: '#a8b8a8', text: '#5a2a1a', accent: '#4a2010', muted: '#788878', inputBg: '#9cac9c', border: '#687868', special: '#1a4a6a' },
 }
 
 // ============================================
@@ -63,7 +65,7 @@ const SITE_THEMES: Record<ThemeName, {
 // ============================================
 
 export default function HomePage() {
-  const [theme, setTheme] = useState<ThemeName>(DEFAULTS.THEME as ThemeName)
+  const [theme, setTheme] = useState<ThemeOption>(DEFAULTS.THEME as ThemeOption)
   const [layout, setLayout] = useState<LayoutPath>('days')
   const [model, setModel] = useState(IPHONE_MODELS[2])
   const [birthdate, setBirthdate] = useState('')
@@ -75,7 +77,8 @@ export default function HomePage() {
     setTimestamp(`&_t=${Date.now()}`)
   }, [theme, layout, model, birthdate])
 
-  const t = SITE_THEMES[theme]
+  // For 'random' theme, use amber styling for the UI
+  const t = theme === 'random' ? SITE_THEMES.amber : SITE_THEMES[theme]
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
   const apiUrl = `${baseUrl}/api/${layout}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}`
 
@@ -85,7 +88,7 @@ export default function HomePage() {
     setTimeout(() => setShowToast(false), 2000)
   }
 
-  const isDarkTheme = theme === 'amber' || theme === 'midnight'
+  const isDarkTheme = theme === 'amber' || theme === 'midnight' || theme === 'random'
 
   return (
     <main className="main">
@@ -220,8 +223,8 @@ export default function HomePage() {
                 </div>
                 <div className="form-group">
                   <label className="form-label">Theme</label>
-                  <select value={theme} onChange={(e) => setTheme(e.target.value as ThemeName)} className="form-select">
-                    {THEME_NAMES.map(tn => <option key={tn} value={tn}>{tn}</option>)}
+                  <select value={theme} onChange={(e) => setTheme(e.target.value as ThemeOption)} className="form-select">
+                    {THEME_OPTIONS.map(tn => <option key={tn} value={tn}>{tn}</option>)}
                   </select>
                 </div>
                 <div className="form-group">

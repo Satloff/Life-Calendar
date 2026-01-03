@@ -29,6 +29,16 @@ export const themes = {
 export type ThemeName = keyof typeof themes
 export type Theme = (typeof themes)[ThemeName]
 
+/** All theme names for random selection */
+const THEME_NAMES = Object.keys(themes) as ThemeName[]
+
+/**
+ * Get a random theme name
+ */
+export function getRandomTheme(): ThemeName {
+  return THEME_NAMES[Math.floor(Math.random() * THEME_NAMES.length)]
+}
+
 // ============================================
 // DATE HELPERS
 // ============================================
@@ -121,10 +131,15 @@ export function getParams(url: string): WallpaperParams {
   const u = new URL(url)
   const birthdateParam = u.searchParams.get('birthdate')
   const dateParam = u.searchParams.get('date')
+  const themeParam = u.searchParams.get('theme') || DEFAULTS.THEME
+  
+  // Handle "random" theme - pick a random theme each time
+  const theme = themeParam === 'random' ? getRandomTheme() : themeParam as ThemeName
+  
   return {
     width: parseInt(u.searchParams.get('width') || String(DEFAULTS.WIDTH)),
     height: parseInt(u.searchParams.get('height') || String(DEFAULTS.HEIGHT)),
-    theme: (u.searchParams.get('theme') || DEFAULTS.THEME) as ThemeName,
+    theme,
     date: dateParam ? parseLocalDate(dateParam) : new Date(),
     birthdate: birthdateParam ? parseLocalDate(birthdateParam) : null,
   }
