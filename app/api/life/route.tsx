@@ -1,50 +1,49 @@
 import { ImageResponse } from '@vercel/og'
 import { themes, getParams, weeksAlive } from '@/lib/utils'
+import { loadFont, getFontConfig } from '@/lib/font'
+import { LAYOUT, FONT, DEFAULTS } from '@/lib/constants'
 
 export const runtime = 'edge'
 
 export async function GET(req: Request) {
+  const fontData = await loadFont(req.url)
   const { width, height, theme, date, birthdate } = getParams(req.url)
-  const t = themes[theme] || themes.midnight
+  const t = themes[theme] || themes.amber
 
-  const lifespan = 90
+  // Life calculations
+  const lifespan = DEFAULTS.LIFESPAN
   const weeksPerYear = 52
   const totalWeeks = lifespan * weeksPerYear
   const weeksLived = weeksAlive(birthdate, date)
-  const weeksLeft = Math.max(0, totalWeeks - weeksLived)
   const pct = ((weeksLived / totalWeeks) * 100).toFixed(1)
 
+  // Grid configuration
   const cols = weeksPerYear
-  // Available height after top (28%) and bottom (14.8%) padding
-  const availableHeight = height * 0.572
-  // Life grid: 90 years = 90 rows
   const totalGridRows = lifespan
-  // Reserve minimal space for footer only (no title)
-  const footerHeight = height * 0.035
+
+  // Layout calculations
+  const availableHeight = height * LAYOUT.CONTENT_HEIGHT
+  const footerHeight = height * LAYOUT.FOOTER_HEIGHT
   const availableForDots = availableHeight - footerHeight
-  // Calculate dot size to fill available space
+
+  // Dot sizing
   const gapRatio = 0.85
   const dotPlusGap = availableForDots / totalGridRows
   const dotSize = Math.round(dotPlusGap / (1 + gapRatio))
   const gap = Math.round(dotSize * gapRatio)
 
-  const dots = []
-  for (let i = 0; i < totalWeeks; i++) {
+  // Build dot grid
+  const dots = Array.from({ length: totalWeeks }, (_, i) => {
     let color = t.future
     if (i < weeksLived) color = t.done
     if (i === weeksLived) color = t.now
-    dots.push(
+    return (
       <div
         key={i}
-        style={{
-          width: dotSize,
-          height: dotSize,
-          borderRadius: '50%',
-          backgroundColor: color,
-        }}
+        style={{ width: dotSize, height: dotSize, backgroundColor: color }}
       />
     )
-  }
+  })
 
   return new ImageResponse(
     (
@@ -53,33 +52,48 @@ export async function GET(req: Request) {
           width: '100%',
           height: '100%',
           backgroundColor: t.bg,
+          fontFamily: FONT.NAME,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'flex-start',
-          paddingTop: Math.floor(height * 0.28),
-          paddingLeft: 10,
-          paddingRight: 10,
-          paddingBottom: Math.max(250, Math.floor(height * 0.148)),
+          paddingTop: Math.floor(height * LAYOUT.TOP_PADDING),
+          paddingBottom: Math.max(250, Math.floor(height * LAYOUT.BOTTOM_PADDING)),
+          paddingLeft: LAYOUT.SIDE_PADDING,
+          paddingRight: LAYOUT.SIDE_PADDING,
         }}
       >
+        {/* Title */}
+        <div
+          style={{
+            display: 'flex',
+            color: t.done,
+            fontSize: Math.floor(height * LAYOUT.TITLE_FONT_SIZE),
+            letterSpacing: 1,
+            marginBottom: Math.round(footerHeight * 1.2),
+          }}
+        >
+          [ LIFE PROGRESS ]
+        </div>
+
         {/* Dot grid */}
         <div
           style={{
             display: 'flex',
             flexWrap: 'wrap',
-            gap: gap,
+            gap,
             width: cols * (dotSize + gap) - gap,
           }}
         >
           {dots}
         </div>
+
         {/* Footer */}
         <div
           style={{
             display: 'flex',
             marginTop: Math.round(footerHeight * 0.4),
-            fontSize: Math.floor(height * 0.0144),
+            fontSize: Math.floor(height * LAYOUT.FOOTER_FONT_SIZE),
             gap: 16,
           }}
         >
@@ -87,7 +101,6 @@ export async function GET(req: Request) {
         </div>
       </div>
     ),
-    { width, height }
+    { width, height, fonts: getFontConfig(fontData) }
   )
 }
-
