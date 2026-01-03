@@ -15,12 +15,16 @@ interface IPhoneModel {
 }
 
 const IPHONE_MODELS: IPhoneModel[] = [
+  { name: 'iPhone 17 Pro Max', width: 1320, height: 2868 },
+  { name: 'iPhone 17 Pro', width: 1206, height: 2622 },
+  { name: 'iPhone 17', width: 1206, height: 2622 },
   { name: 'iPhone 16 Pro Max', width: 1320, height: 2868 },
-  { name: 'iPhone 16 Pro / 15 Pro Max', width: 1179, height: 2556 },
-  { name: 'iPhone 16 / 15 / 15 Pro / 14 Pro', width: DEFAULTS.WIDTH, height: DEFAULTS.HEIGHT },
-  { name: 'iPhone 14 Pro Max', width: 1290, height: 2796 },
-  { name: 'iPhone 14 / 13 / 12', width: 1170, height: 2532 },
-  { name: 'iPhone SE (3rd gen)', width: 750, height: 1334 },
+  { name: 'iPhone 16 Pro', width: 1206, height: 2622 },
+  { name: 'iPhone 15 Plus / 15 Pro Max / 16 Plus', width: 1290, height: 2796 },
+  { name: 'iPhone 15 / 15 Pro / 16', width: DEFAULTS.WIDTH, height: DEFAULTS.HEIGHT },
+  { name: 'iPhone 13 Pro Max / 14 Plus / 14 Pro Max', width: 1284, height: 2778 },
+  { name: 'iPhone 13 / 13 Pro / 14 / 14 Pro', width: 1170, height: 2532 },
+  { name: 'iPhone 13 mini', width: 1080, height: 2340 },
 ]
 
 type LayoutPath = 'days' | 'months' | 'quarters' | 'life'
