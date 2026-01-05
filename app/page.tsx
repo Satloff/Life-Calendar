@@ -70,6 +70,7 @@ export default function HomePage() {
   const [layout, setLayout] = useState<LayoutPath>('days')
   const [model, setModel] = useState(IPHONE_MODELS[2])
   const [birthdate, setBirthdate] = useState('')
+  const [bgUrl, setBgUrl] = useState('')
   const [showToast, setShowToast] = useState(false)
   const [timestamp, setTimestamp] = useState('')
   const [heartJiggle, setHeartJiggle] = useState(false)
@@ -78,12 +79,12 @@ export default function HomePage() {
   // Set timestamp on client only to avoid hydration mismatch
   useEffect(() => {
     setTimestamp(`&_t=${Date.now()}`)
-  }, [theme, layout, model, birthdate])
+  }, [theme, layout, model, birthdate, bgUrl])
 
   // For 'random' theme, use amber styling for the UI
   const t = theme === 'random' ? SITE_THEMES.amber : SITE_THEMES[theme]
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : ''
-  const apiUrl = `${baseUrl}/api/${layout}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}`
+  const apiUrl = `${baseUrl}/api/${layout}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}${bgUrl ? `&bg=${encodeURIComponent(bgUrl)}` : ''}`
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(apiUrl)
@@ -307,6 +308,16 @@ export default function HomePage() {
                   <label className="form-label">Birthdate (optional - highlights your birthday)</label>
                   <input type="date" value={birthdate} onChange={(e) => setBirthdate(e.target.value)} className="form-input" />
                 </div>
+                <div className="form-group">
+                  <label className="form-label">Background Image URL (optional)</label>
+                  <input 
+                    type="url" 
+                    value={bgUrl} 
+                    onChange={(e) => setBgUrl(e.target.value)} 
+                    className="form-input" 
+                    placeholder="https://example.com/image.jpg"
+                  />
+                </div>
               </div>
             </div>
 
@@ -373,7 +384,7 @@ export default function HomePage() {
                 <div key={path} className="preview-item">
                   <p className="preview-label">{name.split(' ')[0]}</p>
                   <img 
-                    src={`/api/${path}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}${timestamp}`}
+                    src={`/api/${path}?width=${model.width}&height=${model.height}&theme=${theme}${birthdate ? `&birthdate=${birthdate}` : ''}${bgUrl ? `&bg=${encodeURIComponent(bgUrl)}` : ''}${timestamp}`}
                     alt={name}
                     className={`preview-img ${path === layout ? 'selected' : 'unselected'}`}
                     onClick={() => setLayout(path)}

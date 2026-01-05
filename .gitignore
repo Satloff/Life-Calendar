@@ -33,6 +33,9 @@ Thumbs.db
 # Vercel
 .vercel/
 
+# User backgrounds
+public/backgrounds/
+
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts

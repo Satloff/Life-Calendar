@@ -35,6 +35,7 @@ const DOCS = {
     },
     date: { type: 'string', default: 'today', description: 'Current date (ISO format: 2024-01-15)' },
     birthdate: { type: 'string', default: 'null', description: 'Birth date for life view and birthday highlighting (ISO format)' },
+    bg: { type: 'string', default: 'null', description: 'Background image URL (must be publicly accessible)' },
   },
   usage: {
     'iOS Shortcuts': 'Use "Get Contents of URL" action with your API URL, then "Set Wallpaper Photo" to Lock Screen',

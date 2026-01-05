@@ -116,6 +116,7 @@ export interface WallpaperParams {
   theme: ThemeName
   date: Date
   birthdate: Date | null
+  bg: string | null
 }
 
 /**
@@ -134,6 +135,7 @@ export function getParams(url: string): WallpaperParams {
   const birthdateParam = u.searchParams.get('birthdate')
   const dateParam = u.searchParams.get('date')
   const themeParam = u.searchParams.get('theme') || DEFAULTS.THEME
+  const bgParam = u.searchParams.get('bg')
   
   // Handle "random" theme - pick a random theme each time
   const theme = themeParam === 'random' ? getRandomTheme() : themeParam as ThemeName
@@ -144,6 +146,7 @@ export function getParams(url: string): WallpaperParams {
     theme,
     date: dateParam ? parseLocalDate(dateParam) : new Date(),
     birthdate: birthdateParam ? parseLocalDate(birthdateParam) : null,
+    bg: bgParam,
   }
 }
 

@@ -7,7 +7,7 @@ export const runtime = 'edge'
 
 export async function GET(req: Request) {
   const fontData = await loadFont(req.url)
-  const { width, height, theme, date, birthdate } = getParams(req.url)
+  const { width, height, theme, date, birthdate, bg } = getParams(req.url)
   const t = themes[theme] || themes.amber
 
   // Use default birthdate if not provided
@@ -70,6 +70,25 @@ export async function GET(req: Request) {
           position: 'relative',
         }}
       >
+        {/* Background Image */}
+        {bg && (
+          <img
+            src={bg}
+            width={width}
+            height={height}
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: width,
+              height: height,
+              objectFit: 'cover',
+              objectPosition: 'center',
+              opacity: 0.15,
+            }}
+          />
+        )}
+
         {/* Title */}
         <div
           style={{
