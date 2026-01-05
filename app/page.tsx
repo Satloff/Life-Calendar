@@ -385,6 +385,52 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Easter Egg Gallery */}
+      <div className="container" style={{ paddingTop: 0 }}>
+        <div style={{ borderTop: `1px solid ${t.border}`, paddingTop: 40 }}>
+          <h2 style={{ fontSize: 20, marginBottom: 8, textAlign: 'center' }}>Holiday Easter Eggs</h2>
+          <p style={{ color: t.muted, fontSize: 13, marginBottom: 24, textAlign: 'center' }}>
+            Special days show a banner across the wallpaper:
+          </p>
+          <div style={{ 
+            display: 'flex', 
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 16,
+            maxWidth: 800,
+            margin: '0 auto'
+          }}>
+            {[
+              { date: "01-01", name: "New Year's Day", theme: "sage" },
+              { date: "02-14", name: "Valentine's Day", theme: "rose" },
+              { date: "07-04", name: "July 4th", theme: "retro" },
+              { date: "10-31", name: "Halloween", theme: "amber" },
+              { date: "11-27", name: "Thanksgiving", theme: "midnight" },
+              { date: "12-25", name: "Christmas", theme: "paper" },
+            ].map((h) => (
+              <div 
+                key={h.date} 
+                style={{ 
+                  textAlign: 'center'
+                }}
+              >
+                <img 
+                  src={`/api/days?width=400&height=870&theme=${h.theme}&date=2025-${h.date}`}
+                  alt={h.name}
+                  style={{
+                    width: 100,
+                    height: 217,
+                    objectFit: 'cover',
+                    border: `1px solid ${t.border}`,
+                  }}
+                />
+                <p style={{ fontSize: 11, color: t.muted, marginTop: 8, marginBottom: 0 }}>{h.name}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {showToast && <div className="toast">URL copied to clipboard</div>}
 
       {/* Footer */}

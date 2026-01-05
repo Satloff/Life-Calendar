@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og'
-import { themes, getParams, daysInYear, daysInMonth, isBirthday, isTodayBirthday, calculateAge, getOrdinalSuffix } from '@/lib/utils'
+import { themes, getParams, daysInYear, daysInMonth, isBirthday, isTodayBirthday, getHolidayEasterEgg, getQuirkyHoliday } from '@/lib/utils'
 import { loadFont, getFontConfig } from '@/lib/font'
 import { LAYOUT, FONT } from '@/lib/constants'
 
@@ -27,7 +27,8 @@ export async function GET(req: Request) {
   const daysLeft = totalDays - daysPassed
   const pct = Math.round((daysPassed / totalDays) * 100)
   const showBirthdayBanner = isTodayBirthday(date, birthdate)
-  const age = calculateAge(date, birthdate)
+  const holidayEasterEgg = getHolidayEasterEgg(date)
+  const quirkyHoliday = getQuirkyHoliday(date)
 
   // Grid configuration
   const cols = 7
@@ -153,18 +154,39 @@ export async function GET(req: Request) {
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
             marginTop: Math.round(footerHeight * 0.4),
-            fontSize: Math.floor(height * LAYOUT.FOOTER_FONT_SIZE),
-            gap: 16,
           }}
         >
-          <span style={{ color: t.now }}>{daysLeft}d left</span>
-          <span style={{ color: t.done, opacity: 0.4 }}>·</span>
-          <span style={{ color: t.done, opacity: 0.6 }}>{pct}%</span>
+          <div
+            style={{
+              display: 'flex',
+              fontSize: Math.floor(height * LAYOUT.FOOTER_FONT_SIZE),
+              gap: 16,
+            }}
+          >
+            <span style={{ color: t.now }}>{daysLeft}d left</span>
+            <span style={{ color: t.done, opacity: 0.4 }}>·</span>
+            <span style={{ color: t.done, opacity: 0.6 }}>{pct}%</span>
+          </div>
+          {quirkyHoliday && (
+            <div
+              style={{
+                display: 'flex',
+                fontSize: Math.floor(height * 0.01),
+                color: t.done,
+                opacity: 0.4,
+                marginTop: 6,
+              }}
+            >
+              Happy {quirkyHoliday}!
+            </div>
+          )}
         </div>
 
-        {/* Birthday Banner - rendered last to appear on top */}
-        {showBirthdayBanner && (
+        {/* Special Day Banner - rendered last to appear on top */}
+        {(showBirthdayBanner || holidayEasterEgg) && (
           <div
             style={{
               position: 'absolute',
@@ -179,7 +201,7 @@ export async function GET(req: Request) {
             <div
               style={{
                 display: 'flex',
-                backgroundColor: t.special,
+                backgroundColor: t.now,
                 color: t.bg,
                 fontSize: Math.floor(height * 0.022),
                 fontWeight: 'bold',
@@ -187,7 +209,7 @@ export async function GET(req: Request) {
                 letterSpacing: 2,
               }}
             >
-              ✦ HAPPY BIRTHDAY ✦
+              {showBirthdayBanner ? '✦ HAPPY BIRTHDAY ✦' : holidayEasterEgg?.message}
             </div>
           </div>
         )}
