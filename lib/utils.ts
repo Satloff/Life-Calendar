@@ -164,3 +164,33 @@ export function birthdayDayOfYear(birthdate: Date | null, year: number): number 
   return dayOfYear(birthdayThisYear)
 }
 
+/**
+ * Check if today is the birthday
+ */
+export function isTodayBirthday(date: Date, birthdate: Date | null): boolean {
+  if (!birthdate) return false
+  return date.getMonth() === birthdate.getMonth() && date.getDate() === birthdate.getDate()
+}
+
+/**
+ * Calculate age in years
+ */
+export function calculateAge(date: Date, birthdate: Date | null): number | null {
+  if (!birthdate) return null
+  let age = date.getFullYear() - birthdate.getFullYear()
+  const monthDiff = date.getMonth() - birthdate.getMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && date.getDate() < birthdate.getDate())) {
+    age--
+  }
+  return age
+}
+
+/**
+ * Get ordinal suffix for a number (1st, 2nd, 3rd, etc.)
+ */
+export function getOrdinalSuffix(n: number): string {
+  const s = ['TH', 'ST', 'ND', 'RD']
+  const v = n % 100
+  return n + (s[(v - 20) % 10] || s[v] || s[0])
+}
+

@@ -1,5 +1,5 @@
 import { ImageResponse } from '@vercel/og'
-import { themes, getParams, weeksAlive } from '@/lib/utils'
+import { themes, getParams, weeksAlive, isTodayBirthday, calculateAge, getOrdinalSuffix } from '@/lib/utils'
 import { loadFont, getFontConfig } from '@/lib/font'
 import { LAYOUT, FONT, DEFAULTS } from '@/lib/constants'
 
@@ -19,6 +19,8 @@ export async function GET(req: Request) {
   const totalWeeks = lifespan * weeksPerYear
   const weeksLived = weeksAlive(effectiveBirthdate, date)
   const pct = ((weeksLived / totalWeeks) * 100).toFixed(1)
+  const showBirthdayBanner = isTodayBirthday(date, birthdate)
+  const age = calculateAge(date, birthdate)
 
   // Grid configuration
   const cols = weeksPerYear
@@ -64,6 +66,7 @@ export async function GET(req: Request) {
           paddingBottom: Math.max(250, Math.floor(height * LAYOUT.BOTTOM_PADDING)),
           paddingLeft: LAYOUT.SIDE_PADDING,
           paddingRight: LAYOUT.SIDE_PADDING,
+          position: 'relative',
         }}
       >
         {/* Title */}
@@ -103,6 +106,35 @@ export async function GET(req: Request) {
           <span style={{ color: t.now }}>{pct}%</span>
           <span style={{ color: t.done, opacity: 0.6 }}>to {lifespan}</span>
         </div>
+
+        {/* Birthday Banner - rendered last to appear on top */}
+        {showBirthdayBanner && (
+          <div
+            style={{
+              position: 'absolute',
+              top: Math.floor(height * (LAYOUT.TOP_PADDING + LAYOUT.CONTENT_HEIGHT / 2)),
+              left: 0,
+              right: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                backgroundColor: t.special,
+                color: t.bg,
+                fontSize: Math.floor(height * 0.022),
+                fontWeight: 'bold',
+                padding: `${Math.floor(height * 0.012)}px ${Math.floor(height * 0.035)}px`,
+                letterSpacing: 2,
+              }}
+            >
+              ✦ HAPPY BIRTHDAY ✦
+            </div>
+          </div>
+        )}
       </div>
     ),
     { width, height, fonts: getFontConfig(fontData) }
